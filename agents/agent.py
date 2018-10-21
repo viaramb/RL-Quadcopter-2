@@ -174,7 +174,7 @@ class DDPG():
         # Noise process
         self.exploration_mu = 0
         self.exploration_theta = 0.15
-        self.exploration_sigma = 0.2
+        self.exploration_sigma = 0.3
         self.noise = OUNoise(self.action_size, self.exploration_mu, self.exploration_theta, self.exploration_sigma)
 
         # Replay memory
@@ -183,8 +183,8 @@ class DDPG():
         self.memory = ReplayBuffer(self.buffer_size, self.batch_size)
 
         # Algorithm parameters
-        self.gamma = 0.95  # discount factor: .99
-        self.tau = 0.02  # for soft update of target parameters: 0.01
+        self.gamma = 0.99  # discount factor: tests: .95
+        self.tau = 0.001  # for soft update of target parameters: tests: 0.01, 0.02
 
     def reset_episode(self):
         self.noise.reset()
