@@ -27,26 +27,10 @@ class Task():
         self.target_pos = target_pos if target_pos is not None else np.array([0., 0., 10.]) 
 
     def get_reward(self):
-        """Uses current pose of sim to return reward.
-        Ref: https://github.com/domangi/rl-quadcopter/blob/master/task.py """
-        reward = 0
-        penalty = 0
-        #reward = 1.-.3*(abs(self.sim.pose[:3] - self.target_pos)).sum()
-        current_position = self.sim.pose[:3]
-        penalty += abs(self.sim.pose[3:6]).sum()
-        penalty += abs(current_position[0]-self.target_pos[0])**2
-        penalty += abs(current_position[1]-self.target_pos[1])**2
-        penalty += 10*abs(current_position[2]-self.target_pos[2])**2
-        penalty += abs(abs(current_position-self.target_pos).sum() - abs(self.sim.v).sum())
-        distance = np.sqrt((current_position[0]-self.target_pos[0])**2 + 
-                           (current_position[1]-self.target_pos[1])**2 + 
-                           (current_position[2]-self.target_pos[2])**2)
-        
-        if distance < 10:
-            reward +=1000
-        reward +=100
-        return reward - penalty*0.0002
-    
+        """Uses current pose of sim to return reward."""
+        reward = 1.-.3*(abs(self.sim.pose[:3] - self.target_pos)).sum()
+        return reward
+
     def step(self, rotor_speeds):
         """Uses action to obtain next state, reward, done."""
         reward = 0
@@ -57,7 +41,7 @@ class Task():
             pose_all.append(self.sim.pose)
         next_state = np.concatenate(pose_all)
         return next_state, reward, done
-    
+
     def reset(self):
         """Reset the sim to start a new episode."""
         self.sim.reset()
